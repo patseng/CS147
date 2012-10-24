@@ -30,8 +30,15 @@
 	<div data-role="content">	
 		
 		<?php
-		// This is a hack. You should connect to a database here.
-		if ($_POST["username"] == "oi") {
+		include("config.php");
+		
+		$query = sprintf("select * from users where username ='%s' and uncrypted_password ='%s'",
+						$_POST["username"],
+						$_POST["password"]);
+		$result = mysql_query($query);
+		$row = mysql_fetch_assoc($result);
+		
+		if ($row) {
 			?>
 			<script type="text/javascript">
 				// Save the username in local storage. That way you
@@ -39,12 +46,11 @@
 				localStorage.setItem('username', '<?=$_POST["username"]?>');
 			</script>
 			<?php
+		
 			echo "<p>Thank you, <strong>".$_POST["username"]."</strong>. You are now logged in.</p>";
 		} else {
 			echo "<p>There seems to have been an error.</p>";
 		}
-			
-
 		?>
 	</div><!-- /content -->
 
